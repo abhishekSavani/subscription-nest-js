@@ -112,4 +112,11 @@ export class SubscriptionService {
     }
     return false;
   }
+
+  isPastDate(subscriptionData) {
+    let today = new Date();
+    let startDate = new Date(subscriptionData.startDate);
+    if (startDate < today) return true;
+    else return false;
+  }
 }

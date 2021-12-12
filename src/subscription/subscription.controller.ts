@@ -25,6 +25,7 @@ export class SubscriptionController {
   async createSubscription(
     @Body() createSubscriptionDto: CreateSubscriptionDto,
   ): Promise<Subscription> {
+    let isPastDate;
     try {
       // CASE1: Check user exist or not
       let isUserExist = await this.subscriptionService.isUserExist(
@@ -37,6 +38,7 @@ export class SubscriptionController {
       );
 
       //CASE3: check for historic date
+      isPastDate = this.subscriptionService.isPastDate(createSubscriptionDto);
 
       if (!isUserExist) {
         throw new NotFoundException({
@@ -47,6 +49,11 @@ export class SubscriptionController {
         throw new ConflictException({
           status: HttpStatus.CONFLICT,
           error: `For date ${createSubscriptionDto.startDate} Plan already exist..!`,
+        });
+      } else if (isPastDate) {
+        throw new ConflictException({
+          status: HttpStatus.CONFLICT,
+          error: `You Can Not Subscribe Service For Past..!`,
         });
       } else {
         const planInfo = this.subscriptionService.getAmountAsPerPlan(
@@ -63,10 +70,16 @@ export class SubscriptionController {
         );
       }
     } catch (e) {
+      debugger;
       if (e.status === 404) {
         throw new NotFoundException({
           status: HttpStatus.NOT_FOUND,
           error: `${createSubscriptionDto.userName} user not exist..!`,
+        });
+      } else if (isPastDate) {
+        throw new ConflictException({
+          status: HttpStatus.CONFLICT,
+          error: `You Can Not Subscribe Service For Past..!`,
         });
       } else if (e.status === 409) {
         throw new ConflictException({
@@ -84,7 +97,7 @@ export class SubscriptionController {
     @Param('username') username: string,
     @Param('date') date?: string,
   ): Promise<void> {
-    //CASE1:  user enter only start date.
+    //CASE1:  user enter only start date. : Done
 
     //CASE2: user enter date which is between startdate and enddate
     return this.subscriptionService.getSubscription(username, date);
