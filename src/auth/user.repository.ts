@@ -27,4 +27,18 @@ export class UserRepository extends Repository<User> {
       }
     }
   }
+
+  async getUserByUserName(userName: AuthCredentialsDto): Promise<any> {
+    try {
+      const userData = await User.findOne({ username: userName.toString() });
+      return {
+        result: userData,
+        statusCode: 200,
+        message: `User Fetch Successfully`,
+      };
+      debugger;
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+  }
 }

@@ -5,9 +5,10 @@ import {
   ValidationPipe,
   Put,
   Param,
+  Get,
 } from '@nestjs/common';
-import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { AuthService } from './auth.service';
+import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -17,5 +18,12 @@ export class AuthController {
     @Param('username', ValidationPipe) username: AuthCredentialsDto,
   ): Promise<void> {
     return this.authService.signUp(username);
+  }
+
+  @Get('/user/:username')
+  getUserByUserName(
+    @Param('username', ValidationPipe) username: AuthCredentialsDto,
+  ): Promise<void> {
+    return this.authService.getUserByUserName(username);
   }
 }

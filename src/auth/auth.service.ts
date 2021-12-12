@@ -12,7 +12,11 @@ export class AuthService {
     private userRepository: UserRepository,
   ) {}
 
-  async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
-    return this.userRepository.signUp(authCredentialsDto);
+  async signUp(userName: AuthCredentialsDto): Promise<void> {
+    return this.userRepository.signUp(userName);
+  }
+
+  async getUserByUserName(userName: AuthCredentialsDto): Promise<void> {
+    return this.userRepository.getUserByUserName(userName);
   }
 }
