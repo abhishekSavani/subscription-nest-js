@@ -1,0 +1,23 @@
+Notes for reviewer 
+
+Time: 5-6 hrs
+framework: nest js
+databse: mysql
+
+Done:
+-  All mention API's in task
+
+Improvement: 
+- add unit test.
+- manage some missing types.
+- add commenting.
+
+
+Notes
+- please find postman collection in /doc folder for teas API.
+- data base is hosted in cloud.
+
+
+
+Thanks. :) 
+
