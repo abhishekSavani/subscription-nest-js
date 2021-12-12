@@ -33,12 +33,8 @@ export class SubscriptionRepository extends Repository<Subscription> {
         message: `Plan Subscribe Successfully`,
       };
     } catch (error) {
-      if (error.code === 'ER_DUP_ENTRY') {
-        // duplicate username
-        throw new ConflictException('Username already exists');
-      } else {
-        throw new InternalServerErrorException();
-      }
+      debugger;
+      throw new InternalServerErrorException();
     }
   }
 

@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { SubscriptionRepository } from './subscription.repository';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto';
 import { Subscription } from './subscription.entity';
+import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class SubscriptionService {
   constructor(
     @InjectRepository(SubscriptionRepository)
     private subscriptionRepository: SubscriptionRepository,
+    private authService: AuthService,
   ) {}
 
   async saveSubscription(
@@ -50,5 +52,22 @@ export class SubscriptionService {
     var result = new Date(date);
     result.setDate(result.getDate() + days);
     return result.toISOString().split('T')[0];
+  }
+
+  isUserExist(subscriptionData) {
+    // return this.authService.getUserByUserName(subscriptionData.userName);
+    return new Promise(async (resolve, reject) => {
+      try {
+        let userData: any = await this.authService.getUserByUserName(
+          subscriptionData.userName,
+        );
+        debugger;
+        if (userData.result.username === subscriptionData.userName)
+          resolve(true);
+      } catch (e) {
+        if (e.status === 404) resolve(false);
+        reject(e);
+      }
+    });
   }
 }
