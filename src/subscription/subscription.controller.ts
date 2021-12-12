@@ -16,9 +16,11 @@ export class SubscriptionController {
 
   @Post()
   @UsePipes(ValidationPipe)
-  createTask(
+  createSubscription(
     @Body() createSubscriptionDto: CreateSubscriptionDto,
   ): Promise<Subscription> {
+    // Check user exist or not
+    // check start date already exist or not
     const planInfo = this.subscriptionService.getAmountAsPerPlan(
       createSubscriptionDto.planId,
     );
