@@ -65,6 +65,7 @@ export class SubscriptionRepository extends Repository<Subscription> {
 
       if (date !== undefined)
         finalResObj = this.whenDateAvailable(subScriptionData[0]);
+      else finalResObj = this.whenDateNotAvailable(subScriptionData);
       return {
         result: finalResObj,
         statusCode: 200,
@@ -85,5 +86,17 @@ export class SubscriptionRepository extends Repository<Subscription> {
     resObj.daysLeft = diffDays;
     resObj.planId = subscriptionData.planId;
     return resObj;
+  }
+
+  whenDateNotAvailable(subscriptionData) {
+    const resArray = [];
+    subscriptionData.forEach(sub => {
+      let obj = {} as any;
+      obj.startDate = sub.startDate;
+      obj.validTill = sub.endDate;
+      obj.planId = sub.planId;
+      resArray.push(obj);
+    });
+    return resArray;
   }
 }
