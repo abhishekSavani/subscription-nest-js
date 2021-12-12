@@ -37,7 +37,7 @@ export class SubscriptionController {
     );
   }
 
-  @Get('/:username/:date')
+  @Get('/:username/:date?')
   signUp(
     @Param('username') username: string,
     @Param('date') date?: string,

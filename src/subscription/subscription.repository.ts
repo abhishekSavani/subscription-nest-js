@@ -17,8 +17,8 @@ export class SubscriptionRepository extends Repository<Subscription> {
 
     subscriptionData.username = createSubscriptionDto.userName;
     subscriptionData.planId = createSubscriptionDto.planId;
-    subscriptionData.startDate = new Date(createSubscriptionDto.startDate);
-    subscriptionData.endDate = new Date(endDate);
+    subscriptionData.startDate = createSubscriptionDto.startDate;
+    subscriptionData.endDate = endDate;
     subscriptionData.amount = amount;
     debugger;
     try {
@@ -43,9 +43,13 @@ export class SubscriptionRepository extends Repository<Subscription> {
   }
 
   async getSubscription(userName, date): Promise<any> {
+    let whereObj = {} as any;
+    whereObj.username = userName.toString();
+    if (date !== undefined) whereObj.startDate = date.toString();
+
     try {
       const userData: Subscription[] = await Subscription.find({
-        username: userName.toString(),
+        where: whereObj,
       });
       return {
         result: userData,

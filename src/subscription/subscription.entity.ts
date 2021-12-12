@@ -12,10 +12,10 @@ export class Subscription extends BaseEntity {
   planId: string;
 
   @Column()
-  startDate: Date;
+  startDate: string;
 
   @Column()
-  endDate: Date;
+  endDate: string;
 
   @Column()
   amount: number;
