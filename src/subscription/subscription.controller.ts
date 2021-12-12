@@ -60,7 +60,6 @@ export class SubscriptionController {
         );
       }
     } catch (e) {
-      debugger;
       if (e.status === 404) {
         throw new NotFoundException({
           status: HttpStatus.NOT_FOUND,

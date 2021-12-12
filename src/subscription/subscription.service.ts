@@ -92,7 +92,7 @@ export class SubscriptionService {
 
   checkDateISInBetweenOrNot(subscriptionData, dateToCheck) {
     let finds = [];
-    debugger;
+
     subscriptionData.forEach(e => {
       let isInBetween = this.dateCheckDate(e.startDate, e.endDate, dateToCheck);
       if (isInBetween) finds.push(true);

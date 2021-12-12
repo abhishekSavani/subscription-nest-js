@@ -33,7 +33,6 @@ export class SubscriptionRepository extends Repository<Subscription> {
         message: `Plan Subscribe Successfully`,
       };
     } catch (error) {
-      debugger;
       throw new InternalServerErrorException();
     }
   }
