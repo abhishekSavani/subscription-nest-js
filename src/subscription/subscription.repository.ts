@@ -33,8 +33,24 @@ export class SubscriptionRepository extends Repository<Subscription> {
         message: `Plan Subscribe Successfully`,
       };
     } catch (error) {
+      debugger;
       throw new InternalServerErrorException();
     }
+  }
+
+  async getAllSubScription(userName, date) {
+    let whereObj = {} as any;
+    whereObj.username = userName.toString();
+
+    if (date !== undefined) whereObj.startDate = date.toString();
+    const subScriptionData: Subscription[] = await Subscription.find({
+      where: whereObj,
+    });
+    return {
+      result: subScriptionData,
+      statusCode: 200,
+      message: `Subscription Detail Fetch Successfully`,
+    };
   }
 
   async getSubscription(userName, date): Promise<any> {

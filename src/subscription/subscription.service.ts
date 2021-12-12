@@ -73,7 +73,7 @@ export class SubscriptionService {
   async checkPlanExistOrNot(subscriptionData) {
     return new Promise(async (resolve, reject) => {
       try {
-        let userSubscriptionData = await this.subscriptionRepository.getSubscription(
+        let userSubscriptionData = await this.subscriptionRepository.getAllSubScription(
           subscriptionData.userName,
           subscriptionData.startDate,
         );
@@ -92,6 +92,7 @@ export class SubscriptionService {
 
   checkDateISInBetweenOrNot(subscriptionData, dateToCheck) {
     let finds = [];
+    debugger;
     subscriptionData.forEach(e => {
       let isInBetween = this.dateCheckDate(e.startDate, e.endDate, dateToCheck);
       if (isInBetween) finds.push(true);
