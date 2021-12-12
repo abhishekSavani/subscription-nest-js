@@ -26,19 +26,17 @@ export class SubscriptionController {
     @Body() createSubscriptionDto: CreateSubscriptionDto,
   ): Promise<Subscription> {
     try {
-      // Check user exist or not
+      // CASE1: Check user exist or not
       let isUserExist = await this.subscriptionService.isUserExist(
         createSubscriptionDto,
       );
 
-      // Check plan exist or not
+      // CASE2: Check plan exist or not
       let isPlanExist = await this.subscriptionService.checkPlanExistOrNot(
         createSubscriptionDto,
       );
 
-      // check for historic date
-
-      //
+      //CASE3: check for historic date
 
       if (!isUserExist) {
         throw new NotFoundException({
@@ -86,6 +84,9 @@ export class SubscriptionController {
     @Param('username') username: string,
     @Param('date') date?: string,
   ): Promise<void> {
+    //CASE1:  user enter only start date.
+
+    //CASE2: user enter date which is between startdate and enddate
     return this.subscriptionService.getSubscription(username, date);
   }
 }
