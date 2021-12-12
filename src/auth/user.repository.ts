@@ -2,6 +2,7 @@ import { Repository, EntityRepository } from 'typeorm';
 import {
   ConflictException,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { User } from './user.entity';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
@@ -33,6 +34,7 @@ export class UserRepository extends Repository<User> {
       const userData: User = await User.findOne({
         username: userName.toString(),
       });
+      if (userData === undefined) throw new NotFoundException();
       delete userData.id;
       return {
         result: userData,
@@ -40,6 +42,7 @@ export class UserRepository extends Repository<User> {
         message: `User Fetch Successfully`,
       };
     } catch (error) {
+      if (error.status === 404) throw new NotFoundException();
       throw new InternalServerErrorException();
     }
   }
