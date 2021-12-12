@@ -39,20 +39,36 @@ export class SubscriptionRepository extends Repository<Subscription> {
 
   async getSubscription(userName, date): Promise<any> {
     let whereObj = {} as any;
+    let finalResObj = {} as any;
     whereObj.username = userName.toString();
     if (date !== undefined) whereObj.startDate = date.toString();
 
     try {
-      const userData: Subscription[] = await Subscription.find({
+      const subScriptionData: Subscription[] = await Subscription.find({
         where: whereObj,
       });
+
+      if (date !== undefined)
+        finalResObj = this.whenDateAvailable(subScriptionData[0]);
       return {
-        result: userData,
+        result: finalResObj,
         statusCode: 200,
-        message: `User Fetch Successfully`,
+        message: `Subscription Detail Fetch Successfully`,
       };
     } catch (error) {
       throw new InternalServerErrorException();
     }
+  }
+
+  whenDateAvailable(subscriptionData) {
+    let resObj = {} as any;
+    const oneDay = 24 * 60 * 60 * 1000;
+    let endDate: any = new Date(subscriptionData.endDate);
+    let currentDate: any = new Date();
+
+    const diffDays = Math.round(Math.abs((currentDate - endDate) / oneDay));
+    resObj.daysLeft = diffDays;
+    resObj.planId = subscriptionData.planId;
+    return resObj;
   }
 }
