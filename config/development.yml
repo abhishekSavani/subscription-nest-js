@@ -1,0 +1,8 @@
+db:
+  host: 'sql6.freesqldatabase.com'
+  username: 'sql6457382'
+  password: 'iF98DYEjdC'
+  synchronize: true
+
+jwt:
+  secret: 'topSecret51'
