@@ -55,13 +55,12 @@ export class SubscriptionService {
   }
 
   isUserExist(subscriptionData) {
-    // return this.authService.getUserByUserName(subscriptionData.userName);
+    // Check user exist or not... !
     return new Promise(async (resolve, reject) => {
       try {
         let userData: any = await this.authService.getUserByUserName(
           subscriptionData.userName,
         );
-        debugger;
         if (userData.result.username === subscriptionData.userName)
           resolve(true);
       } catch (e) {
@@ -69,5 +68,47 @@ export class SubscriptionService {
         reject(e);
       }
     });
+  }
+
+  async checkPlanExistOrNot(subscriptionData) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let userSubscriptionData = await this.subscriptionRepository.getSubscription(
+          subscriptionData.userName,
+          subscriptionData.startDate,
+        );
+        let isPlanExist = this.checkDateISInBetweenOrNot(
+          userSubscriptionData.result,
+          subscriptionData.startDate,
+        );
+        if (isPlanExist) resolve(true);
+        else resolve(false);
+      } catch (e) {
+        if (e.status === 404) resolve(false);
+        reject(e);
+      }
+    });
+  }
+
+  checkDateISInBetweenOrNot(subscriptionData, dateToCheck) {
+    let finds = [];
+    subscriptionData.forEach(e => {
+      let isInBetween = this.dateCheckDate(e.startDate, e.endDate, dateToCheck);
+      if (isInBetween) finds.push(true);
+      else finds.push(false);
+    });
+    return finds.includes(true);
+  }
+
+  dateCheckDate(from, to, check) {
+    var fDate, lDate, cDate;
+    fDate = Date.parse(from);
+    lDate = Date.parse(to);
+    cDate = Date.parse(check);
+
+    if (cDate <= lDate && cDate >= fDate) {
+      return true;
+    }
+    return false;
   }
 }

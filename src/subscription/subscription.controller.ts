@@ -8,6 +8,8 @@ import {
   Param,
   InternalServerErrorException,
   NotFoundException,
+  HttpStatus,
+  ConflictException,
 } from '@nestjs/common';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto';
 import { GetSubscriptionDto } from './dto/get-subscription.dto';
@@ -29,8 +31,21 @@ export class SubscriptionController {
         createSubscriptionDto,
       );
 
-      if (isUserExist) {
-        // check start date already exist or not
+      let isPlanExist = await this.subscriptionService.checkPlanExistOrNot(
+        createSubscriptionDto,
+      );
+
+      if (!isUserExist) {
+        throw new NotFoundException({
+          status: HttpStatus.NOT_FOUND,
+          error: `${createSubscriptionDto.planId} user not exist..!`,
+        });
+      } else if (isPlanExist) {
+        throw new ConflictException({
+          status: HttpStatus.CONFLICT,
+          error: `For date ${createSubscriptionDto.startDate} Plan already exist..!`,
+        });
+      } else {
         const planInfo = this.subscriptionService.getAmountAsPerPlan(
           createSubscriptionDto.planId,
         );
@@ -43,13 +58,21 @@ export class SubscriptionController {
           planInfo.cost,
           endDate,
         );
-      } else {
-        debugger;
-        throw new NotFoundException();
       }
     } catch (e) {
-      if (e.status === 404) throw new NotFoundException();
-      throw new InternalServerErrorException();
+      if (e.status === 404) {
+        throw new NotFoundException({
+          status: HttpStatus.NOT_FOUND,
+          error: `${createSubscriptionDto.planId} user not exist..!`,
+        });
+      } else if (e.status === 409) {
+        throw new ConflictException({
+          status: HttpStatus.CONFLICT,
+          error: `For date ${createSubscriptionDto.startDate} Plan already exist..!`,
+        });
+      } else {
+        throw new InternalServerErrorException();
+      }
     }
   }
 

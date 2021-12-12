@@ -20,20 +20,19 @@ export class SubscriptionRepository extends Repository<Subscription> {
     subscriptionData.startDate = createSubscriptionDto.startDate;
     subscriptionData.endDate = endDate;
     subscriptionData.amount = amount;
-    debugger;
+
     try {
       let subscriptionObject = await subscriptionData.save();
       let obj = {} as any;
       obj.amount = `-${subscriptionObject.amount}`;
       obj.status = `SUCCESS`;
-      debugger;
+
       return {
         result: obj,
         statusCode: 200,
         message: `Plan Subscribe Successfully`,
       };
     } catch (error) {
-      debugger;
       throw new InternalServerErrorException();
     }
   }
