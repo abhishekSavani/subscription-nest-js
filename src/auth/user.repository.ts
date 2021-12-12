@@ -8,19 +8,16 @@ import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
-  async signUp(authCredentialsDto: AuthCredentialsDto): Promise<any> {
-    const { username } = authCredentialsDto;
-
+  async signUp(userName: AuthCredentialsDto): Promise<any> {
     const user = new User();
-    user.username = username;
+    user.username = userName.toString();
     try {
-      let user1 = await user.save();
+      let userObject = await user.save();
       return {
-        result: user1.username,
+        result: userObject.username,
         statusCode: 200,
-        message: `${user1.username} created successfully`,
+        message: `${userObject.username} created successfully`,
       };
-      debugger;
     } catch (error) {
       if (error.code === 'ER_DUP_ENTRY') {
         // duplicate username
