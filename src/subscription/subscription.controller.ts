@@ -25,20 +25,25 @@ export class SubscriptionController {
   async createSubscription(
     @Body() createSubscriptionDto: CreateSubscriptionDto,
   ): Promise<Subscription> {
-    // Check user exist or not
     try {
+      // Check user exist or not
       let isUserExist = await this.subscriptionService.isUserExist(
         createSubscriptionDto,
       );
 
+      // Check plan exist or not
       let isPlanExist = await this.subscriptionService.checkPlanExistOrNot(
         createSubscriptionDto,
       );
 
+      // check for historic date
+
+      //
+
       if (!isUserExist) {
         throw new NotFoundException({
           status: HttpStatus.NOT_FOUND,
-          error: `${createSubscriptionDto.planId} user not exist..!`,
+          error: `${createSubscriptionDto.userName} user not exist..!`,
         });
       } else if (isPlanExist) {
         throw new ConflictException({
@@ -63,7 +68,7 @@ export class SubscriptionController {
       if (e.status === 404) {
         throw new NotFoundException({
           status: HttpStatus.NOT_FOUND,
-          error: `${createSubscriptionDto.planId} user not exist..!`,
+          error: `${createSubscriptionDto.userName} user not exist..!`,
         });
       } else if (e.status === 409) {
         throw new ConflictException({
@@ -77,7 +82,7 @@ export class SubscriptionController {
   }
 
   @Get('/:username/:date?')
-  signUp(
+  getSubscription(
     @Param('username') username: string,
     @Param('date') date?: string,
   ): Promise<void> {
