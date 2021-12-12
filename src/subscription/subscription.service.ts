@@ -23,6 +23,10 @@ export class SubscriptionService {
     );
   }
 
+  async getSubscription(userName, date): Promise<void> {
+    return this.subscriptionRepository.getSubscription(userName, date);
+  }
+
   getAmountAsPerPlan(planId) {
     switch (planId) {
       case 'FREE':

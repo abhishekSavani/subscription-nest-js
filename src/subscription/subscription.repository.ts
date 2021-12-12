@@ -41,4 +41,19 @@ export class SubscriptionRepository extends Repository<Subscription> {
       }
     }
   }
+
+  async getSubscription(userName, date): Promise<any> {
+    try {
+      const userData: Subscription[] = await Subscription.find({
+        username: userName.toString(),
+      });
+      return {
+        result: userData,
+        statusCode: 200,
+        message: `User Fetch Successfully`,
+      };
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+  }
 }

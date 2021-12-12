@@ -5,8 +5,10 @@ import {
   ValidationPipe,
   Get,
   UsePipes,
+  Param,
 } from '@nestjs/common';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto';
+import { GetSubscriptionDto } from './dto/get-subscription.dto';
 import { Subscription } from './subscription.entity';
 import { SubscriptionService } from './subscription.service';
 
@@ -33,5 +35,14 @@ export class SubscriptionController {
       planInfo.cost,
       endDate,
     );
+  }
+
+  @Get('/:username/:date')
+  signUp(
+    @Param('username') username: string,
+    @Param('date') date?: string,
+  ): Promise<void> {
+    debugger;
+    return this.subscriptionService.getSubscription(username, date);
   }
 }
