@@ -37,11 +37,10 @@ export class SubscriptionRepository extends Repository<Subscription> {
     }
   }
 
-  async getAllSubScription(userName, date) {
+  async getAllSubScription(userName) {
     let whereObj = {} as any;
     whereObj.username = userName.toString();
 
-    if (date !== undefined) whereObj.startDate = date.toString();
     const subScriptionData: Subscription[] = await Subscription.find({
       where: whereObj,
     });

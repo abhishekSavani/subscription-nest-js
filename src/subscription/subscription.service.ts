@@ -75,12 +75,12 @@ export class SubscriptionService {
       try {
         let userSubscriptionData = await this.subscriptionRepository.getAllSubScription(
           subscriptionData.userName,
-          subscriptionData.startDate,
         );
         let isPlanExist = this.checkDateISInBetweenOrNot(
           userSubscriptionData.result,
           subscriptionData.startDate,
         );
+
         if (isPlanExist) resolve(true);
         else resolve(false);
       } catch (e) {
